@@ -1,57 +1,47 @@
-from dash import html, dcc, register_page
+import dash
+from dash import html, dcc, dash_table
 import pandas as pd
-import dash_table
 
-register_page(__name__, path="/", name="Tableau")
+import table_cb.py
+
+dash.register_page(__name__, path="/table")
 
 df = pd.read_csv("datas/avocado.csv")
 
 regions = sorted(df["region"].unique())
 types = sorted(df["type"].unique())
-types.insert(0, "Tous")
 
-layout = html.Div(
-    style={"padding": "20px"},
-    children=[
-        html.H2("Tableau des ventes d’avocats"),
+layout = html.Div([
 
-        html.Div(
-            style={"display": "flex", "flexWrap": "wrap", "gap": "20px"},
-            children=[
-                html.Div(
-                    style={"minWidth": "250px"},
-                    children=[
-                        html.Label("Région"),
-                        dcc.Dropdown(
-                            id="region-dropdown",
-                            options=[{"label": r, "value": r} for r in regions],
-                            value=regions[0],
-                            clearable=False
-                        )
-                    ]
-                ),
-                html.Div(
-                    style={"minWidth": "250px"},
-                    children=[
-                        html.Label("Type d’avocat"),
-                        dcc.Dropdown(
-                            id="type-dropdown",
-                            options=[{"label": t, "value": t} for t in types],
-                            value="Tous",
-                            clearable=False
-                        )
-                    ]
-                )
-            ]
-        ),
+    html.H2("Table des ventes d'avocats"),
 
-        html.Br(),
+    html.Div([
 
-        dash_table.DataTable(
-            id="table-avocado",
-            page_size=15,
-            style_table={"overflowX": "auto"},
-            style_cell={"textAlign": "center"},
-        )
-    ]
-)
+        html.Div([
+            html.Label("Région"),
+            dcc.Dropdown(
+                id="region-dropdown",
+                options=[{"label": r, "value": r} for r in regions],
+                value=regions[0]
+            )
+        ], style={"width": "45%", "display": "inline-block"}),
+
+        html.Div([
+            html.Label("Type"),
+            dcc.Dropdown(
+                id="type-dropdown",
+                options=[{"label": t, "value": t} for t in types],
+                value=types,
+                multi=True
+            )
+        ], style={"width": "45%", "display": "inline-block"}),
+
+    ]),
+
+    dash_table.DataTable(
+        id="table-avocado",
+        page_size=10
+    )
+
+])
+

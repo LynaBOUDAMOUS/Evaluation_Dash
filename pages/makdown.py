@@ -1,40 +1,22 @@
-from dash import html, register_page
-import dash_mantine_components as dmc
+from dash import Input, Output, callback
+import pandas as pd
+import plotly.express as px
 
-register_page(__name__, path="/markdown", name="Documentation")
 
-layout = html.Div(
-    style={"padding": "20px"},
-    children=[
-        html.H2("Documentation Markdown"),
+df = pd.read_csv("datas/avocado.csv")
 
-        dmc.Accordion(
-            id="accordion-md",
-            children=[
-                dmc.AccordionItem(
-                    [
-                        dmc.AccordionControl("Explication 1"),
-                        dmc.AccordionPanel("Contenu 1")
-                    ],
-                    value="ex1"
-                ),
-                dmc.AccordionItem(
-                    [
-                        dmc.AccordionControl("Explication 2"),
-                        dmc.AccordionPanel("Contenu 2")
-                    ],
-                    value="ex2"
-                ),
-                dmc.AccordionItem(
-                    [
-                        dmc.AccordionControl("Explication 3"),
-                        dmc.AccordionPanel("Contenu 3")
-                    ],
-                    value="ex3"
-                ),
-            ]
-        ),
-
-        html.Div(id="markdown-content", style={"marginTop": "20px"})
-    ]
+@app.callback(
+    Output("graph1", "figure"),
+    Output("graph2", "figure"),
+    Input("region1", "value"),
+    Input("region2", "value"),
 )
+def update_graphs(r1, r2):
+
+    df1 = df[df["region"] == r1]
+    df2 = df[df["region"] == r2]
+
+    fig1 = px.line(df1, x="Date", y="AveragePrice", title=r1)
+    fig2 = px.line(df2, x="Date", y="AveragePrice", title=r2)
+
+    return fig1, fig2

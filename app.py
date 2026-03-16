@@ -1,27 +1,29 @@
-from dash import Dash, html, dcc
 import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
 
-
-app = Dash(__name__, use_pages=True)
-
-app.layout = html.Div(
-    children=[
-        html.H1("Application Avocado — Dash"),
-
-        html.Div(
-            style={"display": "flex", "gap": "20px"},
-            children=[
-                dcc.Link("Tableau", href="/"),
-                dcc.Link("Comparaison", href="/compare"),
-                dcc.Link("Markdown", href="/markdown"),
-            ]
-        ),
-
-        html.Hr(),
-
-        dash.page_container
-    ]
+app = dash.Dash(
+    __name__,
+    use_pages=True,
+    external_stylesheets=[dbc.themes.BOOTSTRAP]
 )
+
+app.layout = dbc.Container([
+
+    html.H1("Dashboard Avocado", className="title"),
+
+    dbc.Nav(
+        [
+            dbc.NavLink("Table", href="/table"),
+            dbc.NavLink("Compare", href="/compare"),
+            dbc.NavLink("Markdown", href="/markdown"),
+        ],
+        pills=True
+    ),
+
+    dash.page_container
+
+], fluid=True)
 
 if __name__ == "__main__":
     app.run(debug=True)
