@@ -1,4 +1,5 @@
-from dash import html, dcc, register_page
+from dash import html, register_page
+import dash_mantine_components as dmc
 
 register_page(__name__, path="/markdown", name="Documentation")
 
@@ -7,12 +8,30 @@ layout = html.Div(
     children=[
         html.H2("Documentation Markdown"),
 
-        dcc.Accordion(
+        dmc.Accordion(
             id="accordion-md",
-            items=[
-                {"label": "Explication 1", "value": "ex1"},
-                {"label": "Explication 2", "value": "ex2"},
-                {"label": "Explication 3", "value": "ex3"},
+            children=[
+                dmc.AccordionItem(
+                    [
+                        dmc.AccordionControl("Explication 1"),
+                        dmc.AccordionPanel("Contenu 1")
+                    ],
+                    value="ex1"
+                ),
+                dmc.AccordionItem(
+                    [
+                        dmc.AccordionControl("Explication 2"),
+                        dmc.AccordionPanel("Contenu 2")
+                    ],
+                    value="ex2"
+                ),
+                dmc.AccordionItem(
+                    [
+                        dmc.AccordionControl("Explication 3"),
+                        dmc.AccordionPanel("Contenu 3")
+                    ],
+                    value="ex3"
+                ),
             ]
         ),
 
