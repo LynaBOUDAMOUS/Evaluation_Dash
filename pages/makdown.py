@@ -35,7 +35,7 @@ app.layout = dbc.Container([
                             'text-shadow': '3px 3px 6px rgba(0,0,0,0.7)' 
                         })
             ], 
-            # Style CSS pour l'image rouge
+          
             style={
                 'background-image': 'url("/assets/dash.jpg")',
                 'background-size': 'cover',       
@@ -70,6 +70,6 @@ app.layout = dbc.Container([
     ])
 ], fluid=True)
 
-# Lancement de l'application
+
 if __name__ == "__main__":
     app.run(debug=True)
