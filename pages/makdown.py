@@ -1,22 +1,76 @@
-from dash import Input, Output, callback
-import pandas as pd
-import plotly.express as px
+# Importation des bibliothèques
+from dash import Dash, html, dcc
+import dash_bootstrap_components as dbc
+import os
 
+# Création de l'application Dash
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-df = pd.read_csv("datas/avocado.csv")
+#Vérification et sécurité
+def lire_fichier_md(chemin_fichier):
+    if os.path.exists(chemin_fichier):
+        with open(chemin_fichier, 'r', encoding='utf-8') as f:
+            return f.read()
+    else:
+        return f"Le fichier '{chemin_fichier}' est introuvable. Vérifie le chemin."
 
-@app.callback(
-    Output("graph1", "figure"),
-    Output("graph2", "figure"),
-    Input("region1", "value"),
-    Input("region2", "value"),
-)
-def update_graphs(r1, r2):
+#Pour cette fois 
+chemin_dossier = "assets"
 
-    df1 = df[df["region"] == r1]
-    df2 = df[df["region"] == r2]
+contenu_md1 = lire_fichier_md(os.path.join(chemin_dossier, "expli1.md"))
+contenu_md2 = lire_fichier_md(os.path.join(chemin_dossier, "expli2.md"))
+contenu_md3 = lire_fichier_md(os.path.join(chemin_dossier, "expli3.md"))
 
-    fig1 = px.line(df1, x="Date", y="AveragePrice", title=r1)
-    fig2 = px.line(df2, x="Date", y="AveragePrice", title=r2)
+#layout
+app.layout = dbc.Container([
+    dbc.Row([
+        dbc.Col([
+            
+            html.Div([
+                
+                html.H1("Présentation de dash", 
+                        className="text-center text-white fw-bold py-5",
+                        style={
+                            
+                            'text-shadow': '3px 3px 6px rgba(0,0,0,0.7)' 
+                        })
+            ], 
+            # Style CSS pour l'image rouge
+            style={
+                'background-image': 'url("/assets/dash.jpg")',
+                'background-size': 'cover',       
+                'background-position': 'center',  
+                'width': '100%',                  
+                'border-radius': '5px',           
+            })
+        ], width=12)
+    ], className="mb-4"), 
 
-    return fig1, fig2
+    # Composant Accordéon
+    dbc.Row([
+        dbc.Col([
+            dbc.Accordion(
+                [
+                    dbc.AccordionItem(
+                        dcc.Markdown(contenu_md1),
+                        title="Acceuil"
+                    ),
+                    dbc.AccordionItem(
+                        dcc.Markdown(contenu_md2),
+                        title="Layout"
+                    ),
+                    dbc.AccordionItem(
+                        dcc.Markdown(contenu_md3),
+                        title="Callbacks"
+                    ),
+                ],
+                start_collapsed=True,
+                always_open=True 
+            )
+        ], width=12) 
+    ])
+], fluid=True)
+
+# Lancement de l'application
+if __name__ == "__main__":
+    app.run(debug=True)
