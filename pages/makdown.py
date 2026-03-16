@@ -3,10 +3,10 @@ from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 import os
 
-# Création de l'application Dash
+
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-#Vérification et sécurité
+
 def lire_fichier_md(chemin_fichier):
     if os.path.exists(chemin_fichier):
         with open(chemin_fichier, 'r', encoding='utf-8') as f:
@@ -14,14 +14,14 @@ def lire_fichier_md(chemin_fichier):
     else:
         return f"Le fichier '{chemin_fichier}' est introuvable. Vérifie le chemin."
 
-#Pour cette fois 
+
 chemin_dossier = "assets"
 
 contenu_md1 = lire_fichier_md(os.path.join(chemin_dossier, "expli1.md"))
 contenu_md2 = lire_fichier_md(os.path.join(chemin_dossier, "expli2.md"))
 contenu_md3 = lire_fichier_md(os.path.join(chemin_dossier, "expli3.md"))
 
-#layout
+
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
@@ -46,7 +46,6 @@ app.layout = dbc.Container([
         ], width=12)
     ], className="mb-4"), 
 
-    # Composant Accordéon
     dbc.Row([
         dbc.Col([
             dbc.Accordion(
